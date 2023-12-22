@@ -1,20 +1,3 @@
-const shouldDelete = variable => {
-    if (variable.value_name) {
-        const lowerValueName = variable.value_name.toLowerCase();
-        
-        return (
-            lowerValueName.includes("referral") 
-            || lowerValueName.includes("unsubscribed")
-        );
-    }
-    
-    if (variable.name) {
-        return variable.name.toLowerCase().includes("tutorial");
-    }
-
-    return false;
-};
-
 var obj = JSON.parse($response.body);
 
 if (obj.hasOwnProperty("dynamic_variables")) {
@@ -34,15 +17,17 @@ if (obj.hasOwnProperty("dynamic_variables")) {
 
     obj.analytics_profile = "";
 
-    // 使用filter方法创建新的dynamic_variables数组
+    // Use filter method with inline condition
     obj.dynamic_variables = obj.dynamic_variables.filter(variable => {
         if (variable.value_name) {
-            return !shouldDelete(variable);
+            const lowerValueName = variable.value_name.toLowerCase();
+            return !(lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed"));
         }
 
-        if (variable.send_to_analytic) {
-            variable.send_to_analytic = false;
+        if (variable.name) {
+            return !variable.name.toLowerCase().includes("tutorial");
         }
+
         return true;
     });
 
