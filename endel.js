@@ -31,7 +31,11 @@ obj["notification_settings"]= [
 
 obj["analytics_profile"] = "";
 
-
+obj.dynamic_variables.forEach(function(variable) {
+    if (variable.send_to_analytic) {
+        variable.send_to_analytic = false;
+    }
+});
 
 obj["subscription"]= {
         "promo_type": "DEFAULT",
