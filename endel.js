@@ -22,17 +22,9 @@ if (obj.hasOwnProperty("dynamic_variables")) {
         if(variable.send_to_analytic) {
             variable.send_to_analytic = false;
         }
-        
-        if (variable.value_name) {
-            const lowerValueName = variable.value_name.toLowerCase();
-            return !(lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed"));
-        }
 
-        if (variable.name) {
-            return !variable.name.toLowerCase().includes("tutorial");
-        }
-
-        return true;
+        // 要删除的话就不保留，返回 false
+        return !shouldDelete(variable);
     });
 
     obj.subscription = {
@@ -49,6 +41,17 @@ if (obj.hasOwnProperty("dynamic_variables")) {
         store: "APP_STORE",
         trial_canceled: true
     };
+}
+
+const shouldDelete = variable => {
+    if (variable.value_name) {
+        const lowerValueName = variable.value_name.toLowerCase();
+        return lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed");
+    }
+
+    if (variable.name) {
+        return variable.name.toLowerCase().includes("tutorial");
+    }
 }
 
 $done({ body: JSON.stringify(obj) });
