@@ -1,3 +1,14 @@
+const shouldDelete = variable => {
+    if (variable.value_name) {
+        const lowerValueName = variable.value_name.toLowerCase();
+        return lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed");
+    }
+
+    if (variable.name) {
+        return variable.name.toLowerCase().includes("tutorial");
+    }
+}
+
 var obj = JSON.parse($response.body);
 
 if (obj.hasOwnProperty("dynamic_variables")) {
@@ -41,17 +52,6 @@ if (obj.hasOwnProperty("dynamic_variables")) {
         store: "APP_STORE",
         trial_canceled: true
     };
-}
-
-const shouldDelete = variable => {
-    if (variable.value_name) {
-        const lowerValueName = variable.value_name.toLowerCase();
-        return lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed");
-    }
-
-    if (variable.name) {
-        return variable.name.toLowerCase().includes("tutorial");
-    }
 }
 
 $done({ body: JSON.stringify(obj) });
