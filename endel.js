@@ -18,17 +18,15 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     obj.analytics_profile = "";
 
     // 使用filter方法创建新的dynamic_variables数组
-    obj.dynamic_variables = obj.dynamic_variables.filter(function(variable) {
+    obj.dynamic_variables = obj.dynamic_variables.filter(variable => {
         if (variable.value_name) {
-            if (shouldDelete(variable)) {
-                return false; // 不包含在新数组中
-            }
+            return !shouldDelete(variable);
         }
 
         if (variable.send_to_analytic) {
             variable.send_to_analytic = false;
         }
-        return true; // 包含在新数组中
+        return true;
     });
 
     obj.subscription = {
@@ -47,9 +45,9 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     };
 }
 
-function shouldDelete(variable) {
+const shouldDelete = variable => {
     if (variable.value_name) {
-        var lowerValueName = variable.value_name.toLowerCase();
+        const lowerValueName = variable.value_name.toLowerCase();
         
         return (
             lowerValueName.includes("referral") 
@@ -58,12 +56,10 @@ function shouldDelete(variable) {
     }
     
     if (variable.name) {
-        return (
-            variable.name.toLowerCase().includes("tutorial")
-        );
+        return variable.name.toLowerCase().includes("tutorial");
     }
 
     return false;
-}
+};
 
 $done({ body: JSON.stringify(obj) });
