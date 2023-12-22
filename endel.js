@@ -45,7 +45,7 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     };
 }
 
-const shouldDelete = variable => {
+export const shouldDelete = variable => {
     if (variable.value_name) {
         const lowerValueName = variable.value_name.toLowerCase();
         
