@@ -29,7 +29,7 @@ obj["notification_settings"]= [
         }
     ];
 
-obj[""analytics_profile"] = {};
+obj["analytics_profile"] = {};
 
 obj["dynamic_variables"]= [
         {
