@@ -6,6 +6,30 @@ obj["profile"]= {
         "is_student": true
 };
 
+obj["notification_settings"]= [
+        {
+            "type": "PROMO",
+            "is_on": false
+        },
+        {
+            "type": "SUGGESTIONS",
+            "is_on": true
+        },
+        {
+            "type": "NEWS",
+            "is_on": false
+        },
+        {
+            "type": "INSIGHTS",
+            "is_on": true
+        },
+        {
+            "type": "SUNSET",
+            "is_on": true
+        }
+    ];
+
+obj[""analytics_profile"] = {};
 
 obj["dynamic_variables"]= [
         {
