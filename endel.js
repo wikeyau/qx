@@ -1,66 +1,51 @@
 var obj = JSON.parse($response.body);
 
 if (obj.hasOwnProperty("dynamic_variables")) {
-    obj["profile"] = {
-        "is_admin": true,
-        "is_editor": true,
-        "is_student": true
+    obj.profile = {
+        is_admin: true,
+        is_editor: true,
+        is_student: true
     };
 
-    obj["notification_settings"] = [
-        {
-            "type": "PROMO",
-            "is_on": false
-        },
-        {
-            "type": "SUGGESTIONS",
-            "is_on": false
-        },
-        {
-            "type": "NEWS",
-            "is_on": false
-        },
-        {
-            "type": "INSIGHTS",
-            "is_on": true
-        },
-        {
-            "type": "SUNSET",
-            "is_on": true
-        }
+    obj.notification_settings = [
+        { type: "PROMO", is_on: false },
+        { type: "SUGGESTIONS", is_on: false },
+        { type: "NEWS", is_on: false },
+        { type: "INSIGHTS", is_on: true },
+        { type: "SUNSET", is_on: true }
     ];
 
-    obj["analytics_profile"] = "";
-    
+    obj.analytics_profile = "";
+
+    // 使用filter方法创建新的dynamic_variables数组
     obj.dynamic_variables = obj.dynamic_variables.filter(function(variable) {
-        if (variable.send_to_analytic || variable.value_name) {
+        if (variable.value_name) {
             var lowerValueName = variable.value_name.toLowerCase();
             if (lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed") || (variable.name && variable.name.toLowerCase().includes("tutorial"))) {
                 return false; // 不包含在新数组中
             }
         }
-        return true; // 包含在新数组中
-    });
-    obj.dynamic_variables.forEach(function (variable) {
+
         if (variable.send_to_analytic) {
             variable.send_to_analytic = false;
         }
+        return true; // 包含在新数组中
     });
 
-    obj["subscription"] = {
-        "promo_type": "DEFAULT",
-        "period": "LIFETIME",
-        "store_trial": false,
-        "time_left": 9685854580,
-        "price_id": "unknown",
-        "valid_until": 9669710512,
-        "type": "ACTIVE",
-        "trial_type": "CALENDAR_BASED",
-        "cancel_at_period_end": true,
-        "multiple_subscriptions": true,
-        "store": "APP_STORE",
-        "trial_canceled": true
+    obj.subscription = {
+        promo_type: "DEFAULT",
+        period: "LIFETIME",
+        store_trial: false,
+        time_left: 9685854580,
+        price_id: "unknown",
+        valid_until: 9669710512,
+        type: "ACTIVE",
+        trial_type: "CALENDAR_BASED",
+        cancel_at_period_end: true,
+        multiple_subscriptions: true,
+        store: "APP_STORE",
+        trial_canceled: true
     };
 }
 
-$done({body: JSON.stringify(obj)});
+$done({ body: JSON.stringify(obj) });
