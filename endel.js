@@ -1,5 +1,29 @@
 var obj = JSON.parse($response.body);
 
+// 删除不需要的动态变量
+var newDynamicVariables = [];
+
+fun shouldDelete(variable) {
+        return (
+            (variable.value_name && variable.value_name.toLowerCase().includes("referral")) ||
+            (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) ||
+            (variable.name && variable.name.toLowerCase().includes("tutorial"))
+        );
+}
+
+obj.dynamic_variables.forEach(function(variable) {
+    if(shouldDelete(variable)) {
+        continue;
+    }
+    if (variable.send_to_analytic) {
+        variable.send_to_analytic = false;
+    }
+        
+    newDynamicVariables.push(variable);
+});
+
+obj.dynamic_variables = newDynamicVariables;
+
 obj["profile"]= {
         "is_admin": true,
         "is_editor": true,
@@ -30,21 +54,6 @@ obj["notification_settings"]= [
     ];
 
 obj["analytics_profile"] = "";
-
-obj.dynamic_variables.forEach(function(variable) {
-    if (variable.send_to_analytic) {
-        variable.send_to_analytic = false;
-    }
-    if (variable.value_name && variable.value_name.toLowerCase().includes("referral")) {
-        variable.value = "";
-    }    
-    if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
-        variable.value = "";
-    }  
-    if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
-        variable.value = "";
-    }
-});
 
 obj["subscription"]= {
         "promo_type": "DEFAULT",
