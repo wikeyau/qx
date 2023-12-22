@@ -13,7 +13,7 @@ obj["notification_settings"]= [
         },
         {
             "type": "SUGGESTIONS",
-            "is_on": true
+            "is_on": false
         },
         {
             "type": "NEWS",
@@ -41,9 +41,9 @@ obj.dynamic_variables.forEach(function(variable) {
     // if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
     //     variable.value = "";
     // }  
-    if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
-        variable.value = "";
-    }
+    // if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
+    //     variable.value = "";
+    // }
 });
 
 obj["subscription"]= {
