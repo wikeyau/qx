@@ -2,10 +2,9 @@ var obj = JSON.parse($response.body);
 
 obj["profile"]= {
         "is_admin": true,
-        "is_editor": true,
+        "is_editor": false,
         "is_student": true
 };
-
 
 obj["subscription"]= {
         "promo_type": "DEFAULT",
