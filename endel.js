@@ -47,20 +47,20 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     };
 }
 
-const function shouldDelete(variable) {
+function shouldDelete(variable) {
     if (variable.value_name) {
         var lowerValueName = variable.value_name.toLowerCase();
         
         return (
             lowerValueName.includes("referral") 
-            || lowerValueName.includes("unsubscribed"))
-        )
+            || lowerValueName.includes("unsubscribed")
+        );
     }
     
     if (variable.name) {
         return (
             variable.name.toLowerCase().includes("tutorial")
-        )
+        );
     }
 
     return false;
