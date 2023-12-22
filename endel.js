@@ -1,7 +1,9 @@
 const shouldDelete = variable => {
     if (variable.value_name) {
         const lowerValueName = variable.value_name.toLowerCase();
-        return lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed");
+        return lowerValueName.includes("referral") 
+            || lowerValueName.includes("unsubscribed")
+            || lowerValueName.includes("trial");
     }
 
     if (variable.name) {
