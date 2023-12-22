@@ -31,19 +31,19 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     ];
 
     obj["analytics_profile"] = "";
-
+    
+    obj.dynamic_variables = obj.dynamic_variables.filter(function(variable) {
+        if (variable.send_to_analytic || variable.value_name) {
+            var lowerValueName = variable.value_name.toLowerCase();
+            if (lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed") || (variable.name && variable.name.toLowerCase().includes("tutorial"))) {
+                return false; // 不包含在新数组中
+            }
+        }
+        return true; // 包含在新数组中
+    });
     obj.dynamic_variables.forEach(function (variable) {
         if (variable.send_to_analytic) {
             variable.send_to_analytic = false;
-        }
-        if (variable.value_name && variable.value_name.toLowerCase().includes("referral")) {
-            variable.value = "";
-        }
-        if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
-            variable.value = "";
-        }
-        if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
-            variable.value = "";
         }
     });
 
