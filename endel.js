@@ -35,9 +35,9 @@ obj.dynamic_variables.forEach(function(variable) {
     if (variable.send_to_analytic) {
         variable.send_to_analytic = false;
     }
-    // if (variable.value_name && variable.value_name.toLowerCase().includes("referral")) {
-    //     variable.value = "";
-    // }    
+    if (variable.value_name && variable.value_name.toLowerCase().includes("referral")) {
+        variable.value = "";
+    }    
     if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
         variable.value = "";
     }  
