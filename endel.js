@@ -47,7 +47,7 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     };
 }
 
-fun shouldDelete(variable) {
+const fun shouldDelete(variable) {
     if (variable.value_name) {
         var lowerValueName = variable.value_name.toLowerCase();
         
