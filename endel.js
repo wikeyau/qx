@@ -20,8 +20,7 @@ if (obj.hasOwnProperty("dynamic_variables")) {
     // 使用filter方法创建新的dynamic_variables数组
     obj.dynamic_variables = obj.dynamic_variables.filter(function(variable) {
         if (variable.value_name) {
-            var lowerValueName = variable.value_name.toLowerCase();
-            if (lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed") || (variable.name && variable.name.toLowerCase().includes("tutorial"))) {
+            if (shouldDelete(variable)) {
                 return false; // 不包含在新数组中
             }
         }
@@ -46,6 +45,25 @@ if (obj.hasOwnProperty("dynamic_variables")) {
         store: "APP_STORE",
         trial_canceled: true
     };
+}
+
+fun shouldDelete(variable) {
+    if (variable.value_name) {
+        var lowerValueName = variable.value_name.toLowerCase();
+        
+        return (
+            lowerValueName.includes("referral") 
+            || lowerValueName.includes("unsubscribed"))
+        )
+    }
+    
+    if (variable.name) {
+        return (
+            variable.name.toLowerCase().includes("tutorial")
+        )
+    }
+
+    return false;
 }
 
 $done({ body: JSON.stringify(obj) });
