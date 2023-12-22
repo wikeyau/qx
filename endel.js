@@ -19,6 +19,10 @@ if (obj.hasOwnProperty("dynamic_variables")) {
 
     // Use filter method with inline condition
     obj.dynamic_variables = obj.dynamic_variables.filter(variable => {
+        if(variable.send_to_analytic) {
+            variable.send_to_analytic = false;
+        }
+        
         if (variable.value_name) {
             const lowerValueName = variable.value_name.toLowerCase();
             return !(lowerValueName.includes("referral") || lowerValueName.includes("unsubscribed"));
