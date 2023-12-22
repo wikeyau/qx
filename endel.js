@@ -38,12 +38,12 @@ obj.dynamic_variables.forEach(function(variable) {
     // if (variable.value_name && variable.value_name.toLowerCase().includes("referral")) {
     //     variable.value = "";
     // }    
-    if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
-        variable.value = "";
-    }  
-    // if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
+    // if (variable.value_name && variable.value_name.toLowerCase().includes("unsubscribed")) {
     //     variable.value = "";
-    // }
+    // }  
+    if (variable.name && variable.name.toLowerCase().includes("tutorial")) {
+        variable.value = "";
+    }
 });
 
 obj["subscription"]= {
