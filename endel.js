@@ -1,8 +1,8 @@
 var obj = JSON.parse($response.body);
 
 obj["profile"]= {
-        "is_admin": false,
-        "is_editor": false,
+        "is_admin": true,
+        "is_editor": true,
         "is_student": true
 };
 
