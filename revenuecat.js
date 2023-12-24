@@ -11,7 +11,7 @@ if(url.endsWith("offerings")||url.endsWith("products")) {
 	$done({});
 } else {
 	// Rise Sleep APP
-	if (url.indexOf("2263592")!=-1) {
+	if (url.indexOf("4690907")!=-1) {
 		obj["subscriber"]["entitlements"]["pro"]={
             "grace_period_expires_date": null,
             "purchase_date": "2019-12-24T00:00:00Z",
