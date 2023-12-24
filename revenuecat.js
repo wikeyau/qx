@@ -12,8 +12,8 @@ if(url.endsWith("offerings")||url.endsWith("products")) {
 	$done({});
 } else {
 	// Rise Sleep APP
-	if (header.get('X-Client-Bundle-ID') === 'com.risesci.nyx') {
-	// if (url.indexOf("4690907")!=-1) {
+	// if (header.get('X-Client-Bundle-ID') === 'com.risesci.nyx') {
+	if (url.indexOf("4690907")!=-1) {
 		obj["subscriber"]["entitlements"]["pro"]={
             "grace_period_expires_date": null,
             "purchase_date": "2019-12-24T00:00:00Z",
