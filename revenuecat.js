@@ -4,15 +4,15 @@ QX: ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body 
 hostname = api.revenuecat.com
 */
 
+let header=$request.header
 let obj=JSON.parse($response.body);
 let url=$request.url;
-let header=$request.header
 
 if(url.endsWith("offerings")||url.endsWith("products")) {
 	$done({});
 } else {
 	// Rise Sleep APP
-	if (header['X-Client-Bundle-ID'] === 'com.risesci.nyx') {
+	if (header.get('X-Client-Bundle-ID') === 'com.risesci.nyx') {
 	// if (url.indexOf("4690907")!=-1) {
 		obj["subscriber"]["entitlements"]["pro"]={
             "grace_period_expires_date": null,
