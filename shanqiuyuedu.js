@@ -11,7 +11,7 @@ if (url.includes("21df7c478")) {
     obj.data.forEach(element => {
         if (element.uuid === "21df7c478") {
             element.banned = "0";
-            element.vipto: "2099-10-05 07:32:26";
+            element.vipto = "2099-10-05 07:32:26";
         }
     });
 }
