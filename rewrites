@@ -1,5 +1,3 @@
-hostname: api-production.endel.io,api.revenuecat.com,*.815616.xyz
-
 // Endel Lifetime
 ^https:\/\/api-production\.endel\.io\/v4\/call url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/endel.js
 ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/revenuecat.js
