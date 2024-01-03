@@ -3,6 +3,7 @@ QX: ^https:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/ url script-response-body shangq
 
 hostname = *.815616.com
 */
+console.log("shanqiuyuedu.js loaded!")
 
 let obj = JSON.parse($response.body);
 let url = $request.url;
