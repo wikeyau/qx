@@ -1,7 +1,3 @@
 // Endel Lifetime
 ^https:\/\/api-production\.endel\.io\/v4\/call url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/endel.js
 ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/revenuecat.js
-
-// 山丘阅读
-^http:\/\/m\.815616\.xyz\/api\/v2\/captive url reject
-^http:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/8 url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/shanqiuyuedu.js
