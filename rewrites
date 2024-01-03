@@ -3,4 +3,5 @@
 ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/revenuecat.js
 
 // 山丘阅读
+^https:\/\/m\.815616\.xyz\/api\/v2\/captive\/ url reject-200
 ^https:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/shanqiuyuedu.js
