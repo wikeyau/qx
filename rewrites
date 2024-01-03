@@ -1,10 +1,8 @@
+hostname: api-production.endel.io,api.revenuecat.com,*.815616.xyz
+
 // Endel Lifetime
 ^https:\/\/api-production\.endel\.io\/v4\/call url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/endel.js
 ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/revenuecat.js
 
-// Zhuishushenqi
-^https?:\/\/(api|b)\.zhuishushenqi\.com\/advert url reject-200
-^https?:\/\/api\.zhuishushenqi\.com\/splashes\/ios url reject-200
-^https?:\/\/api\.zhuishushenqi\.com\/notification\/shelfMessage url reject-200
-^https?:\/\/api\.zhuishushenqi\.com\/user\/bookshelf-updated url reject-200
-^https?:\/\/itunes\.apple\.com\/lookup\?id=575826903 url reject-200
+// 山丘阅读
+^https:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/shangqiuyuedu.js
