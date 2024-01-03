@@ -4,4 +4,4 @@
 
 // 山丘阅读
 ^http:\/\/m\.815616\.xyz\/api\/v2\/captive url reject-200
-^http:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/\d+$ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/shanqiuyuedu.js
+^http:\/\/m\.815616\.xyz\/api\/v2\/myinfo\/8 url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/shanqiuyuedu.js
