@@ -1,3 +1,25 @@
 // Endel Lifetime
 ^https?:\/\/api-production\.endel\.io\/v\d\/call url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/endel.js
 ^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/revenuecat.js
+
+[filter_local]
+# Financial Times advertising domains
+host, ads.ft.com, reject
+host, creatives.ftimg.net, reject
+
+# Common advertising services used by apps
+host, securepubads.g.doubleclick.net, reject
+host, www.googletagservices.com, reject
+host-suffix, doubleclick.net, reject
+host-suffix, googlesyndication.com, reject
+host-suffix, googleadservices.com, reject
+
+
+[rewrite_local]
+# Clean advertising objects from FT JSON responses
+^https:\/\/(?:www\.)?ft\.com\/.* url script-response-body ft-ad-clean.js
+^https:\/\/api\.ft\.com\/.* url script-response-body ft-ad-clean.js
+
+
+[mitm]
+hostname = www.ft.com, ft.com, api.ft.com
