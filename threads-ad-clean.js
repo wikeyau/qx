@@ -1,114 +1,80 @@
 /*
- * Threads Ad Cleaner for Quantumult X
+ * Meta Threads Ad Cleaner for Quantumult X
  *
- * Targets:
- * /api/v1/feed/text_post_app_timeline/
+ * Removes feed objects that contain explicit advertising
+ * or sponsored-content markers.
  *
- * This version removes the entire feed entry when an advertising
- * marker appears anywhere inside that entry.
+ * Non-JSON responses are returned unchanged.
  */
 
-const body =
+const originalBody =
   typeof $response !== "undefined" &&
   typeof $response.body === "string"
     ? $response.body
     : "";
 
-if (!body) {
+if (!originalBody) {
   $done({});
 } else {
   try {
-    const data = JSON.parse(body);
+    const payload = JSON.parse(originalBody);
+    const REMOVE = "__QX_THREADS_REMOVE__";
 
-    let removedCount = 0;
-
-    const TRUE_AD_FLAGS = new Set([
+    const TRUE_FLAGS = new Set([
       "is_ad",
       "isAd",
-      "is_ads",
-      "isAds",
       "is_sponsored",
       "isSponsored",
       "is_advertisement",
       "isAdvertisement",
       "is_commercial",
       "isCommercial",
-      "is_injected",
-      "isInjected",
       "injected_ad",
-      "injectedAd",
-      "is_injected_ad",
-      "isInjectedAd"
+      "is_injected_ad"
     ]);
 
-    const AD_KEYS = new Set([
+    const HARD_AD_KEYS = new Set([
       "ad_id",
       "adId",
-      "ad_pk",
-      "adPk",
       "ad_metadata",
       "adMetadata",
-      "ad_info",
-      "adInfo",
       "ad_client_token",
       "adClientToken",
       "ads_tracking_token",
       "adsTrackingToken",
-      "ad_tracking_token",
-      "adTrackingToken",
-      "sponsored_label",
-      "sponsoredLabel",
       "sponsored_label_info",
       "sponsoredLabelInfo",
-      "sponsor_tags",
-      "sponsorTags",
-      "ad_disclaimer",
-      "adDisclaimer",
+      "sponsored_label",
+      "sponsoredLabel",
       "ad_demotion_control",
       "adDemotionControl",
+      "ad_disclaimer",
+      "adDisclaimer",
       "threads_ad_info",
-      "threadsAdInfo",
-      "commerciality_status",
-      "commercialityStatus",
-      "commercial_content_type",
-      "commercialContentType",
-      "boosted_status",
-      "boostedStatus"
+      "threadsAdInfo"
     ]);
 
     const TYPE_KEYS = new Set([
       "type",
       "item_type",
       "itemType",
+      "media_type_name",
+      "mediaTypeName",
       "content_type",
       "contentType",
       "product_type",
       "productType",
-      "module_type",
-      "moduleType",
-      "layout_type",
-      "layoutType",
       "__typename",
       "typename"
     ]);
 
-    const LABEL_KEYS = new Set([
-      "label",
-      "display_label",
-      "displayLabel",
-      "social_context",
-      "socialContext",
-      "header",
-      "subtitle"
-    ]);
-
     const AD_TYPE_PATTERN =
-      /^(?:ad|ads|advert|advertisement|sponsored|sponsored_post|sponsored_media|feed_ad|threads_ad|commercial|promoted)$/i;
+      /^(?:ad|ads|advert|advertisement|sponsored|sponsored_post|sponsored_media|threads_ad|feed_ad|commercial)$/i;
 
-    const AD_LABEL_PATTERN =
-      /^(?:sponsored|advertisement|promoted|paid partnership)$/i;
+    const SPONSORED_TEXT_PATTERN =
+      /^(?:sponsored|paid partnership|advertisement)$/i;
 
-    function hasValue(value) {
+    function hasMeaningfulValue(value) {
       if (
         value === null ||
         value === undefined ||
@@ -132,55 +98,54 @@ if (!body) {
       return true;
     }
 
-    function containsAdMarker(value, depth = 0) {
-      if (depth > 15 || value === null || value === undefined) {
+    function isAdObject(value) {
+      if (
+        value === null ||
+        typeof value !== "object" ||
+        Array.isArray(value)
+      ) {
         return false;
       }
 
-      if (Array.isArray(value)) {
-        return value.some((item) =>
-          containsAdMarker(item, depth + 1)
-        );
-      }
-
-      if (typeof value !== "object") {
-        return false;
-      }
-
-      for (const [key, child] of Object.entries(value)) {
+      for (const key of Object.keys(value)) {
         if (
-          TRUE_AD_FLAGS.has(key) &&
-          child === true
+          TRUE_FLAGS.has(key) &&
+          value[key] === true
         ) {
           return true;
         }
 
         if (
-          AD_KEYS.has(key) &&
-          hasValue(child)
+          HARD_AD_KEYS.has(key) &&
+          hasMeaningfulValue(value[key])
         ) {
           return true;
         }
 
         if (
           TYPE_KEYS.has(key) &&
-          typeof child === "string" &&
-          AD_TYPE_PATTERN.test(child.trim())
-        ) {
-          return true;
-        }
-
-        if (
-          LABEL_KEYS.has(key) &&
-          typeof child === "string" &&
-          AD_LABEL_PATTERN.test(child.trim())
+          typeof value[key] === "string" &&
+          AD_TYPE_PATTERN.test(value[key].trim())
         ) {
           return true;
         }
       }
 
-      for (const child of Object.values(value)) {
-        if (containsAdMarker(child, depth + 1)) {
+      const labelCandidates = [
+        value.label,
+        value.display_label,
+        value.displayLabel,
+        value.social_context,
+        value.socialContext,
+        value.header,
+        value.subtitle
+      ];
+
+      for (const candidate of labelCandidates) {
+        if (
+          typeof candidate === "string" &&
+          SPONSORED_TEXT_PATTERN.test(candidate.trim())
+        ) {
           return true;
         }
       }
@@ -190,25 +155,27 @@ if (!body) {
 
     function clean(value) {
       if (Array.isArray(value)) {
-        const result = [];
-
-        for (const item of value) {
-          if (containsAdMarker(item)) {
-            removedCount++;
-            continue;
-          }
-
-          result.push(clean(item));
-        }
-
-        return result;
+        return value
+          .map((item) => clean(item))
+          .filter((item) => item !== REMOVE);
       }
 
-      if (value !== null && typeof value === "object") {
+      if (
+        value !== null &&
+        typeof value === "object"
+      ) {
+        if (isAdObject(value)) {
+          return REMOVE;
+        }
+
         const result = {};
 
         for (const [key, child] of Object.entries(value)) {
-          result[key] = clean(child);
+          const cleanedChild = clean(child);
+
+          if (cleanedChild !== REMOVE) {
+            result[key] = cleanedChild;
+          }
         }
 
         return result;
@@ -217,50 +184,16 @@ if (!body) {
       return value;
     }
 
-    const cleanedData = clean(data);
-
-    console.log(
-      "[Threads Ad Cleaner] URL: " + $request.url
-    );
-
-    console.log(
-      "[Threads Ad Cleaner] Removed entries: " +
-        removedCount
-    );
-
-    /*
-     * Temporary diagnostic notification.
-     * Remove this block once you confirm that the script executes.
-     */
-    const notificationKey =
-      "threads-ad-clean-last-notification";
-
-    const now = Date.now();
-
-    const lastNotification =
-      Number(
-        $prefs.valueForKey(notificationKey) || "0"
-      );
-
-    if (now - lastNotification > 300000) {
-      $notify(
-        "Threads Ad Cleaner",
-        "Timeline response matched",
-        "Removed " + removedCount + " suspected ad entries."
-      );
-
-      $prefs.setValueForKey(
-        String(now),
-        notificationKey
-      );
-    }
+    const cleanedPayload = clean(payload);
 
     $done({
-      body: JSON.stringify(cleanedData)
+      body: JSON.stringify(
+        cleanedPayload === REMOVE ? {} : cleanedPayload
+      )
     });
   } catch (error) {
     console.log(
-      "[Threads Ad Cleaner] Error: " +
+      "[Threads Ad Cleaner] Response left unchanged: " +
         String(
           error && error.message
             ? error.message
