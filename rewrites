@@ -8,5 +8,5 @@
 ^https:\/\/api\.ft\.com\/.* url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/ft-ad-clean.js
 
 # Threads native-app text feed responses
-^https:\/\/(?:i|b\.i)\.instagram\.com\/api\/v1\/feed\/text_post_app_timeline\/?(?:\?.*)?$ url script-response-body threads-ad-clean.js
+^https:\/\/(?:i|b\.i)\.instagram\.com\/api\/v1\/feed\/text_post_app_timeline\/?(?:\?.*)?$ url script-response-body https://raw.githubusercontent.com/wikeyau/qx/main/threads-ad-clean.js
 
